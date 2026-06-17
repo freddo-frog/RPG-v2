@@ -81,12 +81,12 @@ def intro():
     return player(name)
 
 def first_scene():
+    print("=== Scene one: a fork in the road ===")
+    print("You are a traveller on a journey to find treasure in an abandoned fortress. After a few days of walking you find yourself at a fork in the road." \
+    " you can go left and walk along the river or turn right and enter gloomy forest. What do you do?\n")
     while True:
-        print("=== Scene one: a fork in the road ===")
-        print("You are a traveller on a journey to find treasure in an abandoned fortress. After a few days of walking you find yourself at a fork in the road." \
-        "you can go left and walk along the river or turn right and enter gloomy forest. What do you do?\n")
         Input = input("1. go left -> river\n 2. go right ->forest\n")
-        if input == "1":
+        if Input == "1":
             print("you decide to walk along the river.")
             return "river scene"
 
@@ -100,30 +100,31 @@ def first_scene():
 #river scene 2A
 def river_scene():
     print("=== Scene two: Good Karma ===")
-    print("after some time walking you run into an injured merchant sitting on the bank of the river, he asks for you help. do you help him?\n")
-    Input = input("1. help him\n 2.ignore him \n")
-    if Input == "1":
-        print("you stitch up the merchants wounds and send him on his way. he gives you a health potion as a thank you " \
-        "and tells you about a nearby cave rumoured to have a mysterious, valuable treasure deep inside.")
-        hero.potions += 1
-        print(hero.potions)
-        return "helped"
+    print("after some time walking you run into an injured merchant sitting on the bank of the river, he asks for your help. do you help him?\n")
+    while True:
+        Input = input("1. help him\n 2.ignore him \n")
+        if Input == "1":
+            print("you stitch up the merchants wounds and send him on his way. he gives you a health potion as a thank you " \
+            "and tells you about a nearby cave rumoured to have a mysterious, valuable treasure deep inside.")
+            hero.potions += 1
+            print(hero.potions)
+            return "helped"
 
-    elif Input == "2":
-        print("you continue on.")
-        return "ignored"
-    
-    else:
-        print("invalid input, please enter either '1' or '2'.")
+        elif Input == "2":
+            print("you continue on.")
+            return "ignored"
+
+        else:
+            print("invalid input, please enter either '1' or '2'.")
 
 #forest scene 2B
 def forest_scene():
+    print("=== Scene two: Furry Friends ===")
+    print("after some walking you stumble into a clearing in the forest. on the ground you see a small satchel of gold. you pick it up")
+    hero.gold += 10
+    print(f"you have {hero.gold} gold")
+    print("all of a sudden a vicious wolf emerges from the trees and starts circling you. what do you do?")
     while True:
-        print("=== Scene two: Furry Friends ===")
-        print("after some walking you stumble into a clearing in the forest. on the ground you see a small satchel of gold. you pick it up")
-        hero.gold += 10
-        print(f"you have {hero.gold} gold")
-        print("all of a sudden a vicious wolf emerges from the trees and starts circling you. what do you do?")
         Input = input("1. fight / 2. run / 3. heal\n")
         if Input == "1":
             current_enemy = enemy("wolf", 20, 30, 30, 0)
@@ -132,7 +133,7 @@ def forest_scene():
         
         elif Input == "2":
             print("You take off down the path with the wolf following close behind. after a few minutes of running " \
-            "you are able to lose it however you check your pocked and realise you lost the gold during the chase.")
+            "you are able to lose it however you check your pocket and realise you lost the gold during the chase.")
             hero.gold -= 10
             print(hero.gold)
             return "cave scene"
@@ -144,14 +145,14 @@ def forest_scene():
             print("invalid input please enter either '1', '2', '3'.")
     
 def cave_scene():
+    print("=== Scene three: The Cave === ")
+    print("you stumble across an ominous looking cave. do you enter ?")
     while True:
-        print("=== Scene three: The Cave === ")
-        print("you stumble across an ominous looking cave. do you enter ?")
         Choice = input("y / n\n")
     
         if Choice == "y":
             print("you decide to go in. after some walking you find a worn old sword on the ground. you pick it up.")
-            hero.inventory = "worn sword"
+            hero.weapon = "worn sword"
             return "deeper"
         
         elif Choice == "n":
@@ -163,29 +164,32 @@ def cave_scene():
     
 def deeper_cave():
     print("you notice the cave runs deeper underground through a tight passage, do you continue on?")
-    Choice = input("y / n\n")
-    if Choice == "y":
-        print("after you squeeze through the passage you arrive at an opening in the cave. All of a sudden a giant spider ambushes you from the ceiling. ")
-        current_enemy = enemy("giant Spider", 30, 10, 10, 20)
+    while True:
+        Choice = input("y / n\n")
+        if Choice == "y":
+            print("after you squeeze through the passage you arrive at an opening in the cave. All of a sudden a giant spider ambushes you from the ceiling. ")
+            current_enemy = enemy("giant Spider", 30, 10, 10, 20)
 
-        result = fight(current_enemy)
-        if result == 'won':
-            print("when the spider died it dropped a cloak of invisibility and and 20 gold!")
-            hero.inventory.append("invisibility cloak")
+            result = fight(current_enemy)
+            if result == 'won':
+                print("when the spider died it dropped a cloak of invisibility and 20 gold!")
+                hero.inventory.append("invisibility cloak")
+                hero.gold += 20
+                print(f"{hero.name}'s gold: {hero.gold}.")
+                return "merchant"
+
+
+        elif Choice == "n":
+            print("you decide not to risk it.")
             return "merchant"
-
-
-    elif Choice == "n":
-        print("you decide not to risk it.")
-        return "merchant"
-    
-    else:
-        print("invalid input please enter either, 'y' or 'n'.")
+        
+        else:
+            print("invalid input please enter either, 'y' or 'n'.")
 
 def merchant_scene():
+    print("=== Scene three: the wandering merchant ===")
+    print("after exiting the cave, you come across a travelling merchant. he asks if you want to browse his wares.")
     while True:
-        print("=== Scene three: the wandering merchant ===")
-        print("after exciting the cave, you come across a travelling merchant. he asks if you want to browse his wares.")
         Choice = input("shop / leave\n")
         if Choice == "shop":
             item = input("what would you like buy?\n 1.iron sword: 20 gold\n2.health potion: 10 gold")
@@ -223,57 +227,58 @@ def guard_scene():
     thresh1 = Percent_Chance_NoCloak / 100
     thresh2 = Percent_Chance_Cloak / 100
     print("=== Scene four: gates of greystone ===")
-    print("after another long day of walking, you finally arrive at the fortress. there is a bandit guard stationed at the entreance " \
+    print("after another long day of walking, you finally arrive at the fortress. there is a bandit guard stationed at the entrance. " \
     "what do you do?")
-    Choice = input(" 1. fight him / 2. sneak past / 3. bribe him")
-    if Choice == "1":
-        result = fight(current_enemy)
-        if result == 'won':
-            return "treasure"
-    
-    elif Choice == "2":
-        if "invisibility cloak" in hero.inventory:
-            if random.random() > thresh2:
-                print("you snuck past the guard with ease thanks to the invisibility cloak!")
+    while True:
+        Choice = input(" 1. fight him / 2. sneak past / 3. bribe him\n")
+        if Choice == "1":
+            result = fight(current_enemy)
+            if result == 'won':
                 return "treasure"
-            
-            else: 
-                print("you put the cloak on but you accidently made noise and the guard found you! now you have no choice but to fight!")
-                result = fight(current_enemy)
-                if result == 'won':
-                    return "treasure"
         
-        elif "invisibility cloak" not in hero.inventory:
-            print("you spot a gap in the fence and try to slip through...")
-            if random.random() > thresh1:
-                print("It worked! you made it into the fortress!")
-                return "treasure"
-            
-            else:
-                print("it didn't work -_- the guard caught you and now you have no choice but to fight!")
-                result = fight(current_enemy)
-                if result == 'won':
+        elif Choice == "2":
+            if "invisibility cloak" in hero.inventory:
+                if random.random() > thresh2:
+                    print("you snuck past the guard with ease thanks to the invisibility cloak!")
                     return "treasure"
+                
+                else: 
+                    print("you put the cloak on but you accidently made noise and the guard found you! now you have no choice but to fight!")
+                    result = fight(current_enemy)
+                    if result == 'won':
+                        return "treasure"
+            
+            elif "invisibility cloak" not in hero.inventory:
+                print("you spot a gap in the fence and try to slip through...")
+                if random.random() > thresh1:
+                    print("It worked! you made it into the fortress!")
+                    return "treasure"
+                
+                else:
+                    print("it didn't work -_- the guard caught you and now you have no choice but to fight!")
+                    result = fight(current_enemy)
+                    if result == 'won':
+                        return "treasure"
 
-    elif Choice == "3":
-        if hero.gold >=15:
-            print("you gave the guard 15 gold and he agreed to let you through and turn a blind eye.")
-            hero.gold -= 15
-            print(f"you have {hero.gold} remaining.")
-            return "treasure"
+        elif Choice == "3":
+            if hero.gold >=15:
+                print("you gave the guard 15 gold and he agreed to let you through and turn a blind eye.")
+                hero.gold -= 15
+                print(f"you have {hero.gold} remaining.")
+                return "treasure"
+            
+            elif hero.gold <15:
+                print("you do not have enough gold to bribe the guard.")
         
-        elif hero.gold <15:
-            print("you do not have enough gold to bribe the guard.")
-    
-    else:
-        print("invalid input, please try again")
+        else:
+            print("invalid input, please try again")
 
 def final_scene():
     current_enemy = enemy("leader", 18, 50, 50, 0)
+    print("=== Scene five: the bandits keep ===")
+    print("shortly after, you find your way into the treasure room. however when you get there you spot the bandit leader halfway through moving the treasure already.")
+    print("what do you do?")
     while True:
-        print("=== Scene five: the bandits keep ===")
-        print("shortly aafter, you find your way into the treasure room. however when you get there you spot the bandit leader halfway through moving the treasure already.")
-        print("what do you do?")
         Choice = input("1. fight him / 2. attempt to negotiate with him")
         if Choice == "1":
             print("you decide to challenge the bandit leader.")
@@ -288,7 +293,7 @@ def final_scene():
             print("you attempt to negotiate with the bandit leader.")
             print("you approach him and try to strike a deal for the remaining part of the treasure that he hasn't taken yet")
             if hero.weapon == "iron sword":
-                print("the bandit notices the weapon in your sheath and gets intimidated. he decides to let you have the treasure as opposed to risking a fight with you.")
+                print("the bandit notices the weapon in your sheath and gets intimidated. he decides to let you have the treasure he hasn't taken as opposed to risking a fight with you.")
                 return "neutral ending"
 
             else:
@@ -319,7 +324,45 @@ def bad_ending():
     print("you fell in combat against the leader of the bandit and he killed you.")
     print("The END.")
 
+
 hero = intro()
+
+scene = first_scene()
+
+while True:
+    if scene == "river scene":
+        scene = river_scene()
+
+    elif scene == "forest scene":
+        scene = forest_scene()
+
+    elif scene == "helped" or scene == "ignored" or scene == "cave scene":
+        scene = cave_scene()
+
+    elif scene == "deeper":
+        scene = deeper_cave()
+
+    elif scene == "merchant":
+        scene = merchant_scene()
+
+    elif scene == "guard scene":
+        scene = guard_scene()
+
+    elif scene == "treasure":
+        scene = final_scene()
+
+    elif scene == "good ending":
+        good_ending()
+        break
+
+    elif scene == "neutral ending":
+        neutral_ending()
+        break
+
+    elif scene == "bad ending":
+        bad_ending()
+        break
+
 
     
         
