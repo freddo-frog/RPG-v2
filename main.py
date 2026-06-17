@@ -267,7 +267,12 @@ def guard_scene():
     
     else:
         print("invalid input, please try again")
-                
+
+def final_scene():
+    print("=== Scene five: the bandits keep ===")
+
+
+
 hero = intro()
 
     
