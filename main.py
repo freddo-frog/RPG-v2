@@ -75,7 +75,7 @@ def fight(current_enemy):
         elif current_enemy.health <= 0:
             return "won"
         
-#===== scenes: =====
+#===== scenes: ====
 def intro():
     name = input("greetings, traveller. What is your name?\n")
     return player(name)
@@ -124,7 +124,7 @@ def forest_scene():
         hero.gold += 10
         print(f"you have {hero.gold} gold")
         print("all of a sudden a vicious wolf emerges from the trees and starts circling you. what do you do?")
-        Input = input("1. attack / 2. run / 3. heal\n")
+        Input = input("1. fight / 2. run / 3. heal\n")
         if Input == "1":
             current_enemy = enemy("wolf", 20, 30, 30, 0)
             fight(current_enemy) 
@@ -269,9 +269,55 @@ def guard_scene():
         print("invalid input, please try again")
 
 def final_scene():
-    print("=== Scene five: the bandits keep ===")
+    current_enemy = enemy("leader", 18, 50, 50, 0)
+    while True:
+        print("=== Scene five: the bandits keep ===")
+        print("shortly aafter, you find your way into the treasure room. however when you get there you spot the bandit leader halfway through moving the treasure already.")
+        print("what do you do?")
+        Choice = input("1. fight him / 2. attempt to negotiate with him")
+        if Choice == "1":
+            print("you decide to challenge the bandit leader.")
+            result = fight(current_enemy)
+            if result == "won":
+                return "good ending"
+            
+            else:
+                return "bad ending"
+        
+        elif Choice == "2":
+            print("you attempt to negotiate with the bandit leader.")
+            print("you approach him and try to strike a deal for the remaining part of the treasure that he hasn't taken yet")
+            if hero.weapon == "iron sword":
+                print("the bandit notices the weapon in your sheath and gets intimidated. he decides to let you have the treasure as opposed to risking a fight with you.")
+                return "neutral ending"
 
+            else:
+                print("it didn't work, the leader saw no reason to share his winnings with you. instead he attacks!")
+                result = fight(current_enemy)
+                if result == "won":
+                    return "good ending"
+                
+                else: 
+                    return "bad ending"
+        
+        else:
+           print ("invalid input please try again")
 
+# === endings: ===
+def good_ending():
+    print("=== Ending: fortune favours the bold ===")
+    print("you were able to best the leader of the bandits in a fight to the death and leave the fortress with the entirety of the treasure. congrats!!")
+    print("The END.")             
+
+def neutral_ending():
+    print("=== Ending: honour amongst thieves ===")
+    print("the bandit delivered on his end of the deal and let you leave the fortress with half of the gold.")
+    print("The END.")
+
+def bad_ending():
+    print("=== Ending: a warrior falls ===")
+    print("you fell in combat against the leader of the bandit and he killed you.")
+    print("The END.")
 
 hero = intro()
 
